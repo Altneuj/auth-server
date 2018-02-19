@@ -7,8 +7,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Project Reddit Server",
-            "program": "${workspaceRoot}/app/server-without-react.js"
+            "name": "Authentication API",
+            "program": "${workspaceRoot}/app/server.js"
         }
     ]
 }

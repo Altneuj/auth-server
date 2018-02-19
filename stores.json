@@ -1,0 +1,26 @@
+[
+    {
+        "id": "1",
+        "name" : "Brier Creek",
+        "open" : true,
+        "issues" : []
+    },
+    {
+        "id": "2",
+        "name" : "Southpoint",
+        "open" : true,
+        "issues" : ["leaky roof","no inventory","broken furniture"]
+    },
+    {
+        "id": "3",
+        "name" : "Northgate",
+        "open" : false,
+        "issues" : ["fire damage","no inventory","no security cameras"]
+    },
+    {
+        "id": "4",
+        "name" : "South Square",
+        "open" : true,
+        "issues" : ["leaky roof","no security cameras","broken furniture"]
+    }
+]

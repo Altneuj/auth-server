@@ -1,47 +1,49 @@
 var http = require('http');
-var serveStatic = require('serve-static');
+var fs = require('fs');
 var finalHandler = require('finalhandler');
 var queryString = require('querystring');
 var Router = require('router');
 var bodyParser   = require('body-parser');
 
-// Serve up public/ftp folder
-var serve = serveStatic('public', {'index': ['index.html', 'index.htm']})
-
+const PORT = 3001;
 // State holding variables
-var posts = [];
+var stores = [];
+var users = [];
 
 // Setup router
 var myRouter = Router();
 myRouter.use(bodyParser.json());
 
-// This function is a bit simpler...
 http.createServer(function (request, response) {
-  if (request.url.includes('api')) {
-    response.writeHead(200, {'Content-Type': 'application/json'});
-    myRouter(request, response, finalHandler(request, response))
-  } else {
-    serve(request,response, finalHandler(request,response))
+  myRouter(request, response, finalHandler(request, response))
+}).listen(PORT, (error) => {
+  if (error) {
+    return console.log('Error on Server Startup: ', error)
   }
-}).listen(3001);
-
-// Notice how much cleaner these endpoint handlers are...
-myRouter.get('/api/posts', function(request,response) {
-  response.end(JSON.stringify(posts));
+  fs.readFile('stores.json', 'utf8', function (error, data) {
+    if (error) throw error;
+    stores = JSON.parse(data);
+    console.log(`Server setup: ${stores.length} stores loaded`);
+  });
+  fs.readFile('users.json', 'utf8', function (error, data) {
+    if (error) throw error;
+    users = JSON.parse(data);
+    console.log(`Server setup: ${users.length} users loaded`);
+  });
+  console.log(`Server is listening on ${PORT}`);
 });
 
-// See how i'm not having to build up the raw data in the body... body parser just gives me the whole thing as an object.
-myRouter.post('/api/posts', function(request,response) {
-  posts.push(request.body);
+// Public route - all users of API can access
+myRouter.get('/api/stores', function(request,response) {
+  response.end(JSON.stringify(stores));
+});
+
+// Only logged in users can access a specific store's issues
+myRouter.get('/api/stores/:storeId/issues', function(request,response) {
   response.end();
 });
 
-// See how the router automatically handled the path value and extracted the value for me to use?  How nice!
-myRouter.get('/api/posts/:postId/comments', function(request,response) {
-  response.end(JSON.stringify(posts[request.params.postId].comments));
-});
-
-myRouter.post('/api/posts/:postId/comments', function(request,response) {
-  posts[request.params.postId].comments.push(request.body); 
+// Only managers can update a store's information
+myRouter.post('/api/stores/:storeId', function(request,response) {
   response.end();
 });
