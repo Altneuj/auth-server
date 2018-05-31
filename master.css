@@ -1,3 +1,21 @@
+h1,h2,h3,h4,h5{
+  margin: 0;
+  padding: 0;
+}
+
+span{
+  margin: 20px;
+}
+
+ul{
+  list-style: none;
+}
+
+body{
+  display: flex;
+  flex-direction: row;
+}
+
 section{
   padding-left: 40px;
 }
@@ -5,5 +23,10 @@ section{
 button{
   background-color: rgb(103, 172, 91);
   color: #fff;
-  padding: 5px;
+  padding: px;
+}
+
+.container{
+  border: solid 1px black;
+  padding: 10px;
 }
